@@ -3,14 +3,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSON;
 import net.sf.json.groovy.JsonSlurper;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
-public class CrawlFromStackOverFlow {
+
+public class StackOverFlowParserTest {
 	
 	public void ParseStackOverFlowJson(String urlString) throws Exception {		
 //		ObjectMapper objectMapper = new ObjectMapper();
@@ -81,25 +88,30 @@ public class CrawlFromStackOverFlow {
 	}
 	
 	class Book {
-		String id;
-		String alt;
-		String rating;
-		
+		String subtitle;		
+		transient String pubdate;
+		String author;
+		List<Tag> tags;
+	}
+			
+	class Tag {
+		int count;
+		String name;
+		String title;
 	}
 
-	public static void main(String[] args) throws Exception {
-//		String json = readUrl("http://api.stackexchange.com/2.2/search/advanced?order=desc&sort=votes&tagged=json&site=stackoverflow");		
-//		CrawlFromStackOverFlow crawl = new CrawlFromStackOverFlow();
-//		crawl.ParseStackOverFlowJson(urlString);
-		
+	public static void main(String[] args) throws Exception {		
 //	    String json = readUrl("https://api.douban.com/v2/book/1220562");
-	    String json = readUrl("http://www.javascriptkit.com/"
-                + "dhtmltutors/javascriptkit.json");
-	    Gson gson = new Gson();        
-	    Page page = gson.fromJson(json, Page.class);
+		String json = "{\"subtitle\":\"\",\"author\":\"[日] 片山恭一\",\"pubdate\":\"2005-1\",\"tags\":[{\"count\":134,\"name\":\"片山恭一\",\"title\":\"片山恭一\"},{\"count\":62,\"name\":\"日本\",\"title\":\"日本\"},{\"count\":60,\"name\":\"日本文学\",\"title\":\"日本文学\"},{\"count\":38,\"name\":\"小说\",\"title\":\"小说\"},{\"count\":32,\"name\":\"满月之夜白鲸现\",\"title\":\"满月之夜白鲸现\"},{\"count\":15,\"name\":\"爱情\",\"title\":\"爱情\"},{\"count\":8,\"name\":\"純愛\",\"title\":\"純愛\"},{\"count\":8,\"name\":\"外国文学\",\"title\":\"外国文学\"}]}";
+	    
+//		StackOverflowCrawler crawler = new StackOverflowCrawler();
+//		String json = crawler.getAllPages("java", 999);
+		
+	    Gson gson = new Gson();	    	    	    	    	    	    
+	    Book book = gson.fromJson(json, Book.class);
 
-	    System.out.println(page.title);
-	    for (Item item : page.items)
-	        System.out.println("    " + item.title);
+	    System.out.println(book.subtitle);
+	    for (Tag tag : book.tags)
+	        System.out.println("count:" + tag.count + " name:" + tag.name + " title:" + tag.title);
 	}
 }

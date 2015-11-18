@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 public class StackOverflowCrawler {
     
-    public static String sendGet(String url, String param) {
+    public static String getSinglePage(String url, String param) {
         String result = "";
         BufferedReader in = null;
         try {
@@ -29,9 +29,9 @@ public class StackOverflowCrawler {
             Map<String, List<String>> map = connection.getHeaderFields();
 
             // traverse all the headers
-            for (String key : map.keySet()) {
-                System.out.println(key + "--->" + map.get(key));
-            }
+//            for (String key : map.keySet()) {
+//                System.out.println(key + "--->" + map.get(key));
+//            }
 
             // uncompress the InputStream 
             in = new BufferedReader(new InputStreamReader(new GZIPInputStream(connection.getInputStream()), "utf-8"));
@@ -76,12 +76,25 @@ public class StackOverflowCrawler {
     }
     
     public static void main(String[] args) throws Exception{
-        int PageNo = 3;
-        String Tag = "java";
-        for(int i = 1; i <= PageNo; i++){
-	        String s = StackOverflowCrawler.sendGet("https://api.stackexchange.com/2.2/search/advanced", "page=" + PageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + Tag +"&site=stackoverflow");
-	        StringToJSON(s);
+//        int PageNo = 3;
+//        String Tag = "java";
+//        for(int i = 1; i <= PageNo; i++){
+//	        String s = StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + PageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + Tag +"&site=stackoverflow");
+//	        StringToJSON(s);
+//        }
+//     
+    }
+    
+    public String getAllPages(String tag, int pageNo) {
+    	if (tag == null || pageNo <= 0) {
+    		return null;
+    	}
+    	
+    	StringBuffer sb = new StringBuffer();
+        for(int i = 1; i <= pageNo; i++){
+	         sb.append(StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + pageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + tag +"&site=stackoverflow"));
         }
-     
+        
+        return sb.toString();
     }
 }
