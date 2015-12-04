@@ -22,16 +22,10 @@ public class StackOverflowCrawler {
             URLConnection connection = realUrl.openConnection();
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
-//            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
             
             connection.connect();
             // Get all the response headers
             Map<String, List<String>> map = connection.getHeaderFields();
-
-            // traverse all the headers
-//            for (String key : map.keySet()) {
-//                System.out.println(key + "--->" + map.get(key));
-//            }
 
             // uncompress the InputStream 
             in = new BufferedReader(new InputStreamReader(new GZIPInputStream(connection.getInputStream()), "utf-8"));
@@ -92,7 +86,13 @@ public class StackOverflowCrawler {
     	
     	StringBuffer sb = new StringBuffer();
         for(int i = 1; i <= pageNo; i++){
-	         sb.append(StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + pageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + tag +"&site=stackoverflow"));
+        	try {
+        		sb.append(StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + pageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + tag +"&site=stackoverflow"));	         
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         
         return sb.toString();

@@ -23,7 +23,7 @@ public class StackOverFlowParser {
 	
 	public static void main(String[] args) throws Exception {		
 		StackOverFlowParser parser = new StackOverFlowParser();
-		Page pages = parser.parse("java", 30);
+		Page pages = parser.parse("java", 300);
 		
 		for (Question ques : pages.items) {
 			System.out.println(ques.title);
