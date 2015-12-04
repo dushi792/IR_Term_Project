@@ -102,16 +102,16 @@ public class StackOverFlowParserTest {
 
 	public static void main(String[] args) throws Exception {		
 //	    String json = readUrl("https://api.douban.com/v2/book/1220562");
-		String json = "{\"subtitle\":\"\",\"author\":\"[日] 片山恭一\",\"pubdate\":\"2005-1\",\"tags\":[{\"count\":134,\"name\":\"片山恭一\",\"title\":\"片山恭一\"},{\"count\":62,\"name\":\"日本\",\"title\":\"日本\"},{\"count\":60,\"name\":\"日本文学\",\"title\":\"日本文学\"},{\"count\":38,\"name\":\"小说\",\"title\":\"小说\"},{\"count\":32,\"name\":\"满月之夜白鲸现\",\"title\":\"满月之夜白鲸现\"},{\"count\":15,\"name\":\"爱情\",\"title\":\"爱情\"},{\"count\":8,\"name\":\"純愛\",\"title\":\"純愛\"},{\"count\":8,\"name\":\"外国文学\",\"title\":\"外国文学\"}]}";
+//		String json = "{\"subtitle\":\"\",\"author\":\"[日] 片山恭一\",\"pubdate\":\"2005-1\",\"tags\":[{\"count\":134,\"name\":\"片山恭一\",\"title\":\"片山恭一\"},{\"count\":62,\"name\":\"日本\",\"title\":\"日本\"},{\"count\":60,\"name\":\"日本文学\",\"title\":\"日本文学\"},{\"count\":38,\"name\":\"小说\",\"title\":\"小说\"},{\"count\":32,\"name\":\"满月之夜白鲸现\",\"title\":\"满月之夜白鲸现\"},{\"count\":15,\"name\":\"爱情\",\"title\":\"爱情\"},{\"count\":8,\"name\":\"純愛\",\"title\":\"純愛\"},{\"count\":8,\"name\":\"外国文学\",\"title\":\"外国文学\"}]}";
 	    
 //		StackOverflowCrawler crawler = new StackOverflowCrawler();
 //		String json = crawler.getAllPages("java", 999);
 		
 	    Gson gson = new Gson();	    	    	    	    	    	    
-	    Book book = gson.fromJson(json, Book.class);
+//	    Book book = gson.fromJson(json, Book.class);
 
-	    System.out.println(book.subtitle);
-	    for (Tag tag : book.tags)
-	        System.out.println("count:" + tag.count + " name:" + tag.name + " title:" + tag.title);
+//	    System.out.println(book.subtitle);
+//	    for (Tag tag : book.tags)
+//	        System.out.println("count:" + tag.count + " name:" + tag.name + " title:" + tag.title);
 	}
 }

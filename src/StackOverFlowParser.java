@@ -14,6 +14,8 @@ public class StackOverFlowParser {
 		String json = crawler.getAllPages(tag, PageNo);
 		
 	    Gson gson = new Gson();
+	    
+	    
 	    JsonReader reader = new JsonReader(new StringReader(json));
 	    reader.setLenient(true);
 	    Page pages = gson.fromJson(reader, Page.class);
@@ -23,10 +25,14 @@ public class StackOverFlowParser {
 	
 	public static void main(String[] args) throws Exception {		
 		StackOverFlowParser parser = new StackOverFlowParser();
-		Page pages = parser.parse("java", 300);
 		
-		for (Question ques : pages.items) {
-			System.out.println(ques.title);
+		for (int page = 0; page < 100; page++) {
+			Page singlePage = parser.parse("java", page);
+			
+			for (Question ques : singlePage.items) {
+				System.out.println(ques.title);
+			}
 		}
+		
 	}
 }

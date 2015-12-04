@@ -85,15 +85,14 @@ public class StackOverflowCrawler {
     	}
     	
     	StringBuffer sb = new StringBuffer();
-        for(int i = 1; i <= pageNo; i++){
-        	try {
-        		sb.append(StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + pageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + tag +"&site=stackoverflow"));	         
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        }
+       
+    	try {
+    		sb.append(StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + pageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + tag +"&site=stackoverflow"));	         
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}        
         
         return sb.toString();
     }
