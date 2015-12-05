@@ -26,7 +26,7 @@ public class StackOverFlowParser {
 	public static void main(String[] args) throws Exception {		
 		StackOverFlowParser parser = new StackOverFlowParser();
 		
-		for (int page = 0; page < 100; page++) {
+		for (int page = 1; page < 50; page++) {
 			Page singlePage = parser.parse("java", page);
 			
 			for (Question ques : singlePage.items) {

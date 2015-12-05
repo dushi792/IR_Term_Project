@@ -88,7 +88,7 @@ public class StackOverflowCrawler {
        
     	try {
     		sb.append(StackOverflowCrawler.getSinglePage("https://api.stackexchange.com/2.2/search/advanced", "page=" + pageNo +"&pagesize=100&order=desc&sort=votes&tagged=" + tag +"&site=stackoverflow"));	         
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
