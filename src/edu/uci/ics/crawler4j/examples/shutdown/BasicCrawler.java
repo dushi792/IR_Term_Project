@@ -62,7 +62,7 @@ public class BasicCrawler extends WebCrawler {
       String text = htmlParseData.getText();
       String html = htmlParseData.getHtml();
       Set<WebURL> links = htmlParseData.getOutgoingUrls();
-      
+
       System.out.println(html);
 
       logger.debug("Text length: {}", text.length());
