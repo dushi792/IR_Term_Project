@@ -1,10 +1,6 @@
 import java.io.StringReader;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 
@@ -26,11 +22,16 @@ public class StackOverFlowParser {
 	public static void main(String[] args) throws Exception {		
 		StackOverFlowParser parser = new StackOverFlowParser();
 		
-		for (int page = 1; page < 50; page++) {
-			Page singlePage = parser.parse("java", page);
+		for (int page = 1; page < 2; page++) {
+			// Set topic and num of pages
+			Page singlePage = parser.parse("search", page);
 			
 			for (Question ques : singlePage.items) {
-				System.out.println(ques.title);
+//				System.out.println(ques.title);
+				String link = ques.link;
+				System.out.println(link);
+				MyParser myParser = new MyParser();
+				myParser.parseStacakOverFlowUrl(link);
 			}
 		}
 		

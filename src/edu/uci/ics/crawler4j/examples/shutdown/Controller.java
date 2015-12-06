@@ -60,9 +60,9 @@ public class Controller {
     config.setPolitenessDelay(1000);
 
     // Unlimited number of pages can be crawled.
-    config.setMaxPagesToFetch(5);
+    config.setMaxPagesToFetch(100);
     
-    config.setMaxDepthOfCrawling(1);
+    config.setMaxDepthOfCrawling(-1);
 
     /*
      * Instantiate the controller for this crawl.
@@ -77,7 +77,7 @@ public class Controller {
      * URLs that are fetched and then the crawler starts following links
      * which are found in these pages
      */
-    controller.addSeed("http://stackoverflow.com/questions/tagged/java");
+    controller.addSeed("http://stackoverflow.com/questions/2968/what-are-the-different-methods-to-parse-strings-in-java");
     
     /*
      * Start the crawl. This is a blocking operation, meaning that your code
