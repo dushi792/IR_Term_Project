@@ -47,11 +47,10 @@ public class bingTranslator {
 		StringBuilder output = new StringBuilder();
 		while(line != null){
 			int pos = line.lastIndexOf(delimeter, MAXBYTES/bytesPerChar);
-			String ttt = line.substring(0,pos+1);
 			String tmp = Translate.execute(line.substring(0,pos+1), originLan, destLan);
 			output.append(tmp);
-			if(pos+2 < line.length()){
-				line = line.substring(pos+2);
+			if(pos+1 < line.length()){
+				line = line.substring(pos+1);
 			}	
 			else{
 				line = null;
@@ -75,7 +74,6 @@ public class bingTranslator {
 					string = Translate.execute(line, originLan, destLan);
 				}
 				else{
-					System.out.println("dddd");
 					string = processLargeText(line);
 				}
 				writer.write(string+"\r\n");
