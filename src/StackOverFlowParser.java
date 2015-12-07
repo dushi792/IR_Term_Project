@@ -21,19 +21,18 @@ public class StackOverFlowParser {
 	
 	public static void main(String[] args) throws Exception {		
 		StackOverFlowParser parser = new StackOverFlowParser();
-		
-		for (int page = 1; page < 2; page++) {
+//		XMLConvertor xmlConvertor = new XMLConvertor();
+		MyFileWriter myFileWriter = new MyFileWriter();
+
+		for (int page = 1; page <= 200; page++) {
 			// Set topic and num of pages
 			Page singlePage = parser.parse("search", page);
-			
-			for (Question ques : singlePage.items) {
-//				System.out.println(ques.title);
-				String link = ques.link;
-				System.out.println(link);
-				MyParser myParser = new MyParser();
-				myParser.parseStacakOverFlowUrl(link);
-			}
+//			xmlConvertor.convertPageToXML(singlePage);
+
+			myFileWriter.writeFromPage(singlePage);
+			System.out.println("Finish Page " + page);
 		}
-		
+		myFileWriter.closeWriter();
 	}
+
 }
