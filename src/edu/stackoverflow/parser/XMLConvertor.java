@@ -1,5 +1,5 @@
+package edu.stackoverflow.parser;
 
-import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;

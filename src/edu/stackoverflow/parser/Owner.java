@@ -1,3 +1,4 @@
+package edu.stackoverflow.parser;
 
 class Owner {
 	String profile_image;

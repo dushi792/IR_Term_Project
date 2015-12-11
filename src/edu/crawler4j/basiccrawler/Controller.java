@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package edu.uci.ics.crawler4j.examples.shutdown;
+package edu.crawler4j.basiccrawler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

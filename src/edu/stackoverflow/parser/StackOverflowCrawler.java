@@ -1,6 +1,9 @@
+package edu.stackoverflow.parser;
+
+import com.google.gson.GsonBuilder;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import com.google.gson.GsonBuilder;
+
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;

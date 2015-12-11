@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package edu.uci.ics.crawler4j.examples.shutdown;
+package edu.crawler4j.basiccrawler;
 
 import java.util.Set;
 import java.util.regex.Pattern;

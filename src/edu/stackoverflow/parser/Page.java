@@ -1,3 +1,5 @@
+package edu.stackoverflow.parser;
+
 import java.util.List;
 
 public class Page {

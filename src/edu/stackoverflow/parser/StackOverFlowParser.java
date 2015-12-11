@@ -1,7 +1,9 @@
-import java.io.StringReader;
+package edu.stackoverflow.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
+import java.io.StringReader;
 
 
 public class StackOverFlowParser {
@@ -22,7 +24,7 @@ public class StackOverFlowParser {
 	public static void main(String[] args) throws Exception {		
 		StackOverFlowParser parser = new StackOverFlowParser();
 //		XMLConvertor xmlConvertor = new XMLConvertor();
-		MyFileWriter myFileWriter = new MyFileWriter();
+		MyFileWriter myFileWriter = new MyFileWriter("title");
 
 		for (int page = 1; page <= 200; page++) {
 			// Set topic and num of pages
