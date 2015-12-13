@@ -11,33 +11,55 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
+
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.util.*;
 
 public class HelloLucene {
-    public static void main(String[] args) throws IOException, ParseException {
+    StandardAnalyzer analyzer;
+    Directory directory;
+    IndexWriterConfig config;
+    IndexWriter writer = null;
+    IndexReader reader;
+    IndexSearcher searcher;
+
+    public HelloLucene() throws IOException {
         // 0. Specify the analyzer for tokenizing text.
         //    The same analyzer should be used for indexing and searching
-        StandardAnalyzer analyzer = new StandardAnalyzer();
+        analyzer = new StandardAnalyzer();
 
-        // 1. create the index
-        Directory directory = FSDirectory.open(Paths.get("./data/indexweb/"));
+        directory = FSDirectory.open(Paths.get("./data/zhihuindexweb/"));
 
-        IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        config = new IndexWriterConfig(analyzer);
 
-        IndexWriter writer = new IndexWriter(directory, config);
+    }
+
+
+    private void initReader() throws IOException {
+        reader = DirectoryReader.open(directory);
+
+        searcher = new IndexSearcher(reader);
+    }
+
+    public static void main(String[] args) throws Exception {
+        HelloLucene lucene = new HelloLucene();
+
+//        lucene.writetoLucene();
+        ScoreDoc[] results = lucene.searchDoc("how to create QQ");
+
+        lucene.readSortedResults(results);
+
+        lucene.closeReader();
+    }
+
+    private void writetoLucene() throws IOException {
+        writer = new IndexWriter(directory, config);
 
         TrecWebReader webReader = new TrecWebReader();
         Map<String, MyQuestion> map;
@@ -47,40 +69,75 @@ public class HelloLucene {
         }
 
         writer.close();
+    }
 
-        // 2. query
-        String querystr = args.length > 0 ? args[0] : "algorithm";
-
+    private ScoreDoc[] searchDoc(String query) throws Exception {
         // the "title" arg specifies the default field to use
         // when no field is explicitly specified in the query.
-        Query q = new QueryParser("title", analyzer).parse(querystr);
+        initReader();
 
-        // 3. search
-        int hitsPerPage = 10;
-        IndexReader reader = DirectoryReader.open(directory);
+        String[] fields = new String[]{"title", "content", "answerContent"};
+        MultiFieldQueryParser multiFieldQueryParser = new MultiFieldQueryParser(fields, analyzer);
+        Query q = multiFieldQueryParser.parse(query);
+
+        int hitsPerPage = 150;
+
         IndexSearcher searcher = new IndexSearcher(reader);
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
         searcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
+        return hits;
+    }
+
+    private void readSortedResults(ScoreDoc[] hits) throws IOException {
+
         // 4. display results
         System.out.println("Found " + hits.length + " hits.");
-        for(int i=0;i<hits.length;++i) {
-            int docId = hits[i].doc;
-            Document d = searcher.doc(docId);
-            System.out.println((i + 1) + ". " + d.get("docno"));
-            System.out.println(d.get("title"));
-            System.out.println(d.get("content"));
-            System.out.println(d.get("votes"));
-            System.out.println(d.get("answerContent"));
+
+        List<Map.Entry<Integer, Double>> list = sortDocScore(hits);
+
+        for (Map.Entry<Integer, Double> entry : list) {
+            Document d = searcher.doc(entry.getKey());
+            Double score = entry.getValue();
+
+            System.out.println("Score:" + score);
+            System.out.println("title:" + d.get("title"));
+            System.out.println("content:" + d.get("content"));
+            System.out.println("votes:" + d.get("votes"));
+            System.out.println("Answer:" + d.get("answerContent"));
+        }
+    }
+
+    private List<Map.Entry<Integer, Double>> sortDocScore(ScoreDoc[] hits) throws IOException {
+        TreeMap<Integer, Double> treeMap = new TreeMap<>();
+
+        for (ScoreDoc hit : hits) {
+            Document d = searcher.doc(hit.doc);
+
+            // Calculate Final Score
+//            Double Origin = hit.score * (Double.valueOf(d.get("votes")) + 1);
+            Double newScore = hit.score * (Double.valueOf(d.get("votes")) + 1) / (Double.valueOf(d.get("totalVotes")) + 1);
+
+            treeMap.put(hit.doc, newScore);
         }
 
-        // reader can only be closed when there
-        // is no need to access the documents any more.
+        List<Map.Entry<Integer, Double>> list = new ArrayList<Map.Entry<Integer, Double>>(treeMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
+            @Override
+            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+
+        return list;
+    }
+
+    private void closeReader() throws IOException {
         reader.close();
     }
 
-    private static void addDoc(IndexWriter writer, Map<String, MyQuestion> map) throws IOException {
+    private void addDoc(IndexWriter writer, Map<String, MyQuestion> map) throws IOException {
         for (Map.Entry<String, MyQuestion> entry : map.entrySet()) {
             String docno = entry.getKey();
 
@@ -93,16 +150,17 @@ public class HelloLucene {
 
                 doc.add(new StoredField("docno", docno));
                 doc.add(new TextField("title", title, Field.Store.YES));
+                doc.add((new StoredField("totalVotes", ques.getTotalvotes())));
                 if (content != null && content.length() > 0) {
                     doc.add(new TextField("content", content, Field.Store.YES));
                 }
 
                 doc.add((new StoredField("votes", ans.getVotes())));
+
                 doc.add((new TextField("answerContent", ans.getContent(), Field.Store.YES)));
 
                 writer.addDocument(doc);
             }
         }
-        writer.close();
     }
 }

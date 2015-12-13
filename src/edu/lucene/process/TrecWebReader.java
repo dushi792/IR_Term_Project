@@ -20,7 +20,7 @@ public class TrecWebReader {
     String line;
 
     public TrecWebReader() throws IOException {
-        fis = new FileInputStream("./data/trecweb");
+        fis = new FileInputStream("./data/zhihutrecweb");
         reader = new BufferedReader(new InputStreamReader(fis));
     }
 
@@ -78,6 +78,7 @@ public class TrecWebReader {
         Map<String, MyQuestion> map = new HashMap<>();
         String docNo = null;
         MyQuestion ques = null;
+        int totalvotes = 0;
 
         for ( ;line != null; line = reader.readLine()){
             if (line.length() == 0 ) {
@@ -88,6 +89,7 @@ public class TrecWebReader {
 
             switch (lineType) {
                 case ("DOCNO") :
+                    totalvotes = 0;
                     docNo = getTagText(line);
                     ques = new MyQuestion();
                     break;
@@ -98,11 +100,15 @@ public class TrecWebReader {
                     setContent(ques);
                     break;
                 case ("answer") :
-                    addAnswer(ques);
+                    totalvotes += addAnswer(ques);
                     break;
                 case ("/DOC") :
+                    if (ques != null) {
+                        ques.setTotalvotes(totalvotes);
+                    }
+
                     map.put(docNo, ques);
-                    break;
+                    return map;
 
             }
 
@@ -127,15 +133,19 @@ public class TrecWebReader {
         }
     }
 
-    private void addAnswer(MyQuestion ques) throws IOException {
+    private int addAnswer(MyQuestion ques) throws IOException {
         MyAnswer ans = new MyAnswer();
 
         String lineType;
+        int votesInt = 0;
+
         for (line = reader.readLine(); !(lineType = getLineType(line)).equals("/answer") ; line = reader.readLine()) {
             if (lineType.equals("votes")) {
                 ans = new MyAnswer();
                 String votes = getTagText(line);
                 ans.setVotes(votes);
+
+                votesInt = Integer.valueOf(votes);
             }
             else if (lineType.equals("p")) {
                 StringBuilder sb = new StringBuilder();
@@ -149,6 +159,7 @@ public class TrecWebReader {
                 ques.getAnswers().add(ans);
             }
         }
+        return votesInt;
     }
 
 

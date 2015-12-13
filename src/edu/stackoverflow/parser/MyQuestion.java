@@ -6,6 +6,19 @@ import java.util.ArrayList;
  * Created by zhaojun on 12/6/15.
  */
 public class MyQuestion {
+    String title;
+    String content;
+    int totalvotes;
+    ArrayList<MyAnswer> answers = new ArrayList<>();
+
+    public int getTotalvotes() {
+        return totalvotes;
+    }
+
+    public void setTotalvotes(int totalvotes) {
+        this.totalvotes = totalvotes;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -30,7 +43,4 @@ public class MyQuestion {
         this.answers = answers;
     }
 
-    String title;
-    String content;
-    ArrayList<MyAnswer> answers = new ArrayList<>();
 }
