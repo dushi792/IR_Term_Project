@@ -1,0 +1,96 @@
+*{
+	padding: 0px;
+	margin: 0px;
+}
+
+body{
+	word-wrap: break-word;
+}
+
+a {
+	text-decoration: none;
+}
+
+.question{
+	padding: 15px 0;
+	border-color: white;
+	border-style: solid;
+	border-top-color: #999;
+	border-top-width: thin;
+}
+
+.label{
+	line-height: 1.4;
+	color: #333;
+	font-size: 15px;
+    letter-spacing: 0;
+}
+
+.title{
+	color: #0077CC !important;
+	font-size: 22px;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    font-weight: bold;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.title a{
+	display:inline-block;
+}
+
+.title a::first-letter {
+    text-transform: uppercase;
+}
+
+
+
+.url {
+	color: green;
+}
+
+.answer{
+    font-family: "Georgia","Times","Times New Roman","serif";
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.answer p::first-letter {
+    text-transform: uppercase;
+}
+
+.sitename {
+	color: #999;
+    font-weight: 400;
+}
+
+.vote{
+	font-size: 13px;
+    color: #999;
+    font-weight: bold;
+}
+
+.footer {
+	margin-bottom: 50px;
+}
+
+#inputBox_header {
+	padding-left: 16px;
+}
+
+#searchTipBox {
+	top: 31px;
+}
+
+#searchTip_header {
+	background-color: white;
+	width: 100%;
+	display: none;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.dropdown-menu li .searchTipOption {
+	padding-left: 16px;
+}

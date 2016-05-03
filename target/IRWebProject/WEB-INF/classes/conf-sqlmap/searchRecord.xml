@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.pitt.IRWebProject.searchRecord.dao.SearchRecordDAO">
+
+	<resultMap type="edu.pitt.IRWebProject.searchRecord.bo.SearchRecord" id="searchRecordResultMap">
+		<id property="searchID" column="searchID" />
+		<result property="query" column="query" />
+		<result property="datetime" column="datetime" />
+		<result property="userID" column="userID" />
+	</resultMap>
+
+	<select id="selectSearchRecordByQueryLike" parameterType="java.lang.String" resultMap="searchRecordResultMap">
+		SELECT
+		query, count(*)
+		FROM searchrecord
+		WHERE query LIKE '${query}%'
+		GROUP BY query
+		ORDER BY COUNT(*) DESC
+		LIMIT 10;
+	</select>
+
+	<insert id="insertSearchRecord" parameterType="edu.pitt.IRWebProject.searchRecord.bo.SearchRecord"
+		useGeneratedKeys="true">
+		INSERT INTO searchrecord
+		<choose>
+			<when test="userID != -1">
+				(query,datetime,userID)
+				VALUES
+				(#{query},#{datetime},#{userID})
+			</when>
+			<otherwise>
+				(query,datetime)
+				VALUES (#{query},#{datetime})
+			</otherwise>
+		</choose>
+	</insert>
+
+</mapper>  

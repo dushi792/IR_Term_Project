@@ -1,0 +1,28 @@
+#container {
+	padding: 120px 0;
+}
+
+#inputBox {
+	/* 	width: calc(100% - 71px);
+	display: inline-block; */
+	
+}
+
+#searchButton {
+	/* 	position: absolute;
+	left: calc(100% - 86px); */
+	width: 91px;
+}
+
+#searchTip {
+	display: none;
+	position: relative;
+	margin-top: -1px;
+	width: calc(100% - 91px);
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.dropdown-menu li .searchTipOption {
+	padding-left: 16px;
+}
